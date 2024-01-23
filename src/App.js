@@ -1,25 +1,39 @@
-import logo from './logo.svg';
-import './App.css';
+// src/components/Table.js
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { addTable } from './store/slice';
 
-function App() {
+const App = () => {
+  const dispatch = useDispatch();
+  const tables = useSelector((state) => state.office.tables);
+  const [tableName, setTableName] = useState('');
+
+  const handleAddTable = () => {
+    if (tableName.trim() !== '') {
+      dispatch(addTable(tableName));
+      setTableName('');
+    }
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h2>Table List</h2>
+      <ul>
+        {tables.map((table) => (
+          <li key={table.id}>{table.name}</li>
+        ))}
+      </ul>
+      <div>
+        <input
+          type="text"
+          value={tableName}
+          onChange={(e) => setTableName(e.target.value)}
+          placeholder="Enter table name"
+        />
+        <button onClick={handleAddTable}>Add Table</button>
+      </div>
     </div>
   );
-}
+};
 
 export default App;
